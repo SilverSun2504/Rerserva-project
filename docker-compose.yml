@@ -1,0 +1,30 @@
+# Versión de la sintaxis de Docker Compose
+version: '3.8'
+
+# Definición de los servicios (contenedores) que vamos a usar
+services:
+  # Nombramos nuestro servicio de base de datos como "db"
+  db:
+    # Usamos la imagen oficial de PostgreSQL, versión 15
+    image: postgres:15
+
+    # Le decimos que siempre se reinicie si se detiene
+    restart: always
+
+    # Variables de entorno para configurar la base de datos
+    environment:
+      POSTGRES_USER: user        # Usuario para la base de datos
+      POSTGRES_PASSWORD: password  # Contraseña para el usuario
+      POSTGRES_DB: reservas_db     # Nombre de la base de datos que se creará
+
+    # Mapeamos los puertos: conecta el puerto 5432 de tu PC al 5432 del contenedor
+    ports:
+      - '5432:5432'
+
+    # Montamos un volumen para que los datos no se borren al apagar el contenedor
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Docker gestionará este volumen para guardar los datos de forma segura
+volumes:
+  postgres_data:
