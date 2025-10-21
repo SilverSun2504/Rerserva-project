@@ -8,6 +8,7 @@ import Header from '@/app/components/landing/layout/Header';
 import RoomCard from '@/app/components/landing/rooms/RoomCard';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { useUser } from '@/app/context/UserContext';
 
 interface Room {
   id: string;
@@ -19,6 +20,7 @@ interface Room {
 }
 
 export default function RoomsPage() {
+  const { user } = useUser();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,14 +52,16 @@ export default function RoomsPage() {
             <h1 className="text-3xl font-bold text-gray-900">Salas de Reuniones</h1>
             <p className="text-gray-500">Explora y gestiona las salas disponibles</p>
           </div>
-          <Link
-            href="/rooms/new"
-            className="flex items-center gap-2 bg-blue-700 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-800 transition-colors"
-          >
-            <Plus size={20} /> Nueva Sala
-          </Link>
+          {user && user.role === 'Admin' && (
+            <Link
+              href="/rooms/new"
+              className="flex items-center gap-2 bg-blue-700 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-800 transition-colors"
+            >
+              <Plus size={20} />
+              Nueva Sala
+            </Link>
+          )}
         </div>
-
         {isLoading ? (
           <p className="text-center text-gray-500">Cargando salas...</p>
         ) : error ? (
@@ -73,10 +77,10 @@ export default function RoomsPage() {
                 wing = parts[1] || 'Ala no especificada'; 
                 floor = parseInt(floorInfo.replace('Piso ', '')) || 0;
               }
-
               return (
                 <RoomCard
                   key={room.id}
+                  id={room.id}
                   name={room.name}
                   floor={floor}
                   wing={wing}

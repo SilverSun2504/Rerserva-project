@@ -14,7 +14,6 @@ export default function HeroSection() {
           Sistema completo para solicitar, aprobar y gestionar reservas de
           espacios de reunión en tu empresa
         </p>
-
         <div className="mt-8 flex justify-center gap-4">
           <Link
             href="/registrarse"

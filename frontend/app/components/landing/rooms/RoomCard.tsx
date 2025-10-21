@@ -11,9 +11,10 @@ import {
   SquarePen,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-// Definimos los tipos de datos que espera el componente
 type RoomCardProps = {
+  id: string;
   name: string;
   floor: number;
   wing: string;
@@ -23,6 +24,7 @@ type RoomCardProps = {
 };
 
 export default function RoomCard({
+  id,
   name,
   floor,
   wing,
@@ -48,7 +50,6 @@ export default function RoomCard({
           objectFit="cover"
         />
       </div>
-
       <div className="p-4 flex-grow">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-bold text-gray-800">{name}</h3>
@@ -56,19 +57,16 @@ export default function RoomCard({
             <SquarePen size={18} />
           </button>
         </div>
-
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
           <MapPin size={14} />
           <span>
             Piso {floor} - Ala {wing}
           </span>
         </div>
-
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
           <Users size={14} />
           <span>Capacidad: {capacity} personas</span>
         </div>
-
         <div>
           <h4 className="text-sm font-medium text-gray-600 mb-2">
             Equipamiento:
@@ -86,11 +84,13 @@ export default function RoomCard({
           </div>
         </div>
       </div>
-
       <div className="p-4 bg-gray-50 border-t">
-        <button className="w-full bg-blue-700 text-white font-semibold py-2.5 rounded-md hover:bg-blue-800 transition-colors">
+        <Link
+          href={`/rooms/${id}`}
+          className="block w-full text-center bg-blue-700 text-white font-semibold py-2.5 rounded-md hover:bg-blue-800 transition-colors"
+        >
           Ver Detalles y Reservar
-        </button>
+        </Link>
       </div>
     </div>
   );

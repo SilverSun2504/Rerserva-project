@@ -16,6 +16,8 @@ interface User {
   fullName: string;
   email: string;
   role: string;
+  area_id: string | null;
+  area_name: string | null;
 }
 
 interface UserContextType {
@@ -30,7 +32,6 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true); 
-
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem("user");
@@ -42,17 +43,14 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
     setIsLoading(false);
   }, []);
-
   const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };
-
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
   };
-
   return (
     <UserContext.Provider value={{ user, login, logout, isLoading }}>
       {children}

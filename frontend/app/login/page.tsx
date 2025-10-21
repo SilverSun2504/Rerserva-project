@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [password, setPassword] = useState("");
+  
   const API_URL = "http://localhost:3001";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,9 +29,7 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await response.json();
-
       if (response.ok) {
         login(data);
         router.push("/dashboard");
@@ -69,7 +68,6 @@ export default function LoginPage() {
             <span className="block sm:inline">{error}</span>
           </div>
         )}
-
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
@@ -88,7 +86,6 @@ export default function LoginPage() {
               required
             />
           </div>
-
           <div className="mb-6">
             <label
               htmlFor="password"
@@ -106,7 +103,6 @@ export default function LoginPage() {
               required
             />
           </div>
-
           <button
             type="submit"
             className="w-full bg-blue-700 text-white py-2.5 rounded-md font-semibold hover:bg-blue-800 transition-colors"
@@ -114,7 +110,6 @@ export default function LoginPage() {
             Iniciar Sesión
           </button>
         </form>
-
         <p className="text-center text-sm text-gray-600 mt-6">
           ¿No tienes una cuenta?{" "}
           <Link

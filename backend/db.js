@@ -1,4 +1,4 @@
-/* LOGICA PARA LA CONECCION DEL BACK CON LA BASE DE DATOS */
+/* LOGICA PARA LA CONEXION DEL BACK CON LA BASE DE DATOS */
 
 require('dotenv').config();
 
@@ -14,4 +14,5 @@ const pool = new Pool({
 
 module.exports = {
   query: (text, params) => pool.query(text, params),
+  pool: pool,
 };

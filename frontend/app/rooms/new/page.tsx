@@ -69,19 +69,16 @@ export default function NewRoomPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <Header />
-
       <main className="container mx-auto p-6 max-w-2xl">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Nueva Sala de Reuniones
         </h1>
-
         <Link
           href="/rooms"
           className="flex items-center gap-2 text-blue-600 hover:underline mb-8"
         >
           <ArrowLeft size={18} /> Volver a Salas
         </Link>
-
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md mb-6">
             {error}
