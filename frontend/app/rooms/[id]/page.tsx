@@ -1,20 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useUser } from "@/app/context/UserContext";
 import Header from "@/app/components/landing/layout/Header";
 import Image from "next/image";
-import {
-  MapPin,
-  Users,
-  Monitor,
-  Projector,
-  Clapperboard,
-  Mic2,
-  SquarePen,
-  ArrowLeft,
-} from "lucide-react";
+import { MapPin, Users, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface Room {
@@ -28,7 +19,6 @@ interface Room {
 
 export default function RoomDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const { user } = useUser();
   const [room, setRoom] = useState<Room | null>(null);
   const [startDate, setStartDate] = useState("");
@@ -51,6 +41,7 @@ export default function RoomDetailPage() {
           setIsLoading(false);
         })
         .catch((err) => {
+          console.error("Error al cargar detalles de la sala:", err);
           setError("No se pudo cargar la sala.");
           setIsLoading(false);
         });
@@ -92,8 +83,12 @@ export default function RoomDetailPage() {
       setStartTime("");
       setEndDate("");
       setEndTime("");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Ocurrió un error desconocido al cargar las salas.");
+      }
     }
   };
 

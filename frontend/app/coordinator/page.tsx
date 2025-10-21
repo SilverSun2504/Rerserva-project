@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import Header from '@/app/components/landing/layout/Header';
-import { useUser } from '@/app/context/UserContext';
-import { useRouter } from 'next/navigation';
-import CoordinatorCard from '@/app/components/landing/coordinator/CoordinatorCard';
+import { useState, useEffect } from "react";
+import Header from "@/app/components/landing/layout/Header";
+import { useUser } from "@/app/context/UserContext";
+import { useRouter } from "next/navigation";
+import CoordinatorCard from "@/app/components/landing/coordinator/CoordinatorCard";
 
 interface PendingReservation {
   id: string;
@@ -22,12 +22,12 @@ export default function CoordinatorPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = 'http://localhost:3001';
+  const API_URL = "http://localhost:3001";
 
   useEffect(() => {
-    if (isUserLoading) return; 
-    if (!user || user.role !== 'Admin') {
-      router.push('/dashboard'); 
+    if (isUserLoading) return;
+    if (!user || user.role !== "Admin") {
+      router.push("/dashboard");
       return;
     }
     if (!user.area_id) {
@@ -37,14 +37,20 @@ export default function CoordinatorPage() {
     }
     const fetchPendingReservations = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/reservations/pending/area/${user.area_id}`);
+        const response = await fetch(
+          `${API_URL}/api/reservations/pending/area/${user.area_id}`
+        );
         if (!response.ok) {
-          throw new Error('No se pudieron cargar las solicitudes.');
+          throw new Error("No se pudieron cargar las solicitudes.");
         }
         const data = await response.json();
         setReservations(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Ocurrió un error al cargar las solicitudes.");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -52,19 +58,26 @@ export default function CoordinatorPage() {
     fetchPendingReservations();
   }, [user, isUserLoading, router]);
 
-  const handleUpdateStatus = async (id: string, status: 'Aprobada' | 'Rechazada') => {
+  const handleUpdateStatus = async (
+    id: string,
+    status: "Aprobada" | "Rechazada"
+  ) => {
     try {
       const response = await fetch(`${API_URL}/api/reservations/${id}/status`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
       if (!response.ok) {
-        throw new Error('Error al actualizar la reserva.');
+        throw new Error("Error al actualizar la reserva.");
       }
-      setReservations(prev => prev.filter(res => res.id !== id));
-    } catch (err: any) {
-      setError(err.message);
+      setReservations((prev) => prev.filter((res) => res.id !== id));
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Ocurrió un error al actualizar la reserva.");
+      }
     }
   };
   if (isLoading || isUserLoading) {
@@ -81,9 +94,12 @@ export default function CoordinatorPage() {
       <Header />
       <main className="container mx-auto p-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Panel de Coordinador</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Panel de Coordinador
+          </h1>
           <p className="text-gray-500">
-            Aprobar o rechazar solicitudes pendientes del área: <span className="font-semibold">{user?.area_name}</span>
+            Aprobar o rechazar solicitudes pendientes del área:{" "}
+            <span className="font-semibold">{user?.area_name}</span>
           </p>
         </div>
         {error && <p className="text-center text-red-500">{error}</p>}
@@ -93,12 +109,12 @@ export default function CoordinatorPage() {
               No hay solicitudes pendientes para tu área.
             </p>
           )}
-          {reservations.map(res => (
+          {reservations.map((res) => (
             <CoordinatorCard
               key={res.id}
               reservation={res}
-              onApprove={() => handleUpdateStatus(res.id, 'Aprobada')}
-              onReject={() => handleUpdateStatus(res.id, 'Rechazada')}
+              onApprove={() => handleUpdateStatus(res.id, "Aprobada")}
+              onReject={() => handleUpdateStatus(res.id, "Rechazada")}
             />
           ))}
         </div>

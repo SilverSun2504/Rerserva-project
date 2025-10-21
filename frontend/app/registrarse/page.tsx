@@ -30,8 +30,12 @@ export default function RegisterPage() {
         if (!response.ok) throw new Error("No se pudieron cargar las áreas");
         const data = await response.json();
         setAreas(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("No se pudieron cargar las áreas");
+        }
       }
     };
     fetchAreas();
@@ -60,6 +64,7 @@ export default function RegisterPage() {
         setError(data.error || "No se pudo completar el registro.");
       }
     } catch (err) {
+      console.error("Error en handleSubmit:", err);
       setError("No se pudo conectar con el servidor.");
     }
   };

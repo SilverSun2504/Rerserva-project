@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { User, Calendar, Clock, AlertTriangle } from "lucide-react";
+import { User, Calendar, AlertTriangle } from "lucide-react";
 
 interface CoordinatorCardProps {
   reservation: {

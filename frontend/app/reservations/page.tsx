@@ -35,10 +35,14 @@ export default function ReservationsPage() {
             throw new Error("No se pudieron cargar tus reservas.");
           }
           const data = await response.json();
-          console.log('Datos recibidos del backend:', data);
+          console.log("Datos recibidos del backend:", data);
           setReservations(data);
-        } catch (err: any) {
-          setError(err.message);
+        } catch (err) {
+          if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError("Ocurrió un error desconocido al cargar las reservas.");
+          }
         } finally {
           setIsLoading(false);
         }

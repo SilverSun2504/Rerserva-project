@@ -87,9 +87,13 @@ export default function DashboardPage() {
           throw new Error("Error al cargar próximas reservas.");
         const upcomingData = await upcomingResponse.json();
         setUpcomingReservations(upcomingData);
-      } catch (err: any) {
+      } catch (err) {
         console.error("Error fetching dashboard data:", err);
-        setError(err.message);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Ocurrió un error desconocido al cargar los datos.");
+        }
       } finally {
         setIsLoading(false);
       }

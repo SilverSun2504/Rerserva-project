@@ -41,8 +41,13 @@ export default function ReportsPage() {
       if (!response.ok) throw new Error("Error al generar el reporte.");
       const data = await response.json();
       setReservations(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred while fetching data.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +56,7 @@ export default function ReportsPage() {
   useEffect(() => {
     if (!isUserLoading && (!user || user.role !== "Admin")) {
       router.push("/dashboard");
-      return; 
+      return;
     }
 
     fetch(`${API_URL}/api/users`)
@@ -64,7 +69,7 @@ export default function ReportsPage() {
       .then((data) => setRooms(data))
       .catch((err) => console.error("Error fetching rooms:", err));
     fetchReservations();
-  }, [user, isUserLoading, router]); 
+  }, [user, isUserLoading, router]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

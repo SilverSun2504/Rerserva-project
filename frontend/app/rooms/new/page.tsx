@@ -62,6 +62,7 @@ export default function NewRoomPage() {
         setError(data.error || "No se pudo crear la sala.");
       }
     } catch (err) {
+      console.error("Error al crear la sala:", err);
       setError("Error de conexión con el servidor.");
     }
   };
